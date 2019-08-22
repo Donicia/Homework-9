@@ -57,10 +57,18 @@ def precipitation():
     """Return the JSON representation of your dictionary"""
     # Query all precipitation results
     
+
     results = session.query(Measurement.date, Measurement.prcp).\
      filter(func.strftime("%Y-%m-%d", Measurement.date) >=dt.date(2016,8,23)).all()
     
-    return jsonify(results)
+    date_data = []
+    for results in results:
+        precip_dict = {}
+        precip_dict["date"] = results[0]
+        precip_dict["prcp"] = results[1]
+        date_data.append(precip_dict)
+   
+    return jsonify(date_data)
 
 @app.route("/api/v1.0/stations")
 def stations():
